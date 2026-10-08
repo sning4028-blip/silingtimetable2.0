@@ -4,6 +4,7 @@
         android:allowBackup="true"
         android:label="思宁课表"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:icon="@drawable/app_icon"
         <activity
             android:name=".MainActivity"
             android:exported="true">
