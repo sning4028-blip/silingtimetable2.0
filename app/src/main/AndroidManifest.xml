@@ -4,7 +4,7 @@
     android:allowBackup="true"
     android:icon="@drawable/appicon"
     android:roundIcon="@drawable/appicon"
-    android:label="思灵课表"
+    android:label="思宁小课堂"
     android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
             android:name=".MainActivity"
