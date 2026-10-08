@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#4f6ef7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>26市场营销2课表</title>
+<style>
+:root{--brand:#4f6ef7;--brand2:#6a8dff;--line:#eef0f5;--text:#1c2033;--sub:#9aa1b5}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{font:14px/1.4 -apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;
+  background:#f5f6fa;color:var(--text);overscroll-behavior-y:contain}
+button{font-family:inherit}
+
+header{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:6px;
+  padding:calc(env(safe-area-inset-top,0px) + 10px) 12px 10px;
+  background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;
+  box-shadow:0 4px 16px rgba(79,110,247,.3)}
+header .nav{width:34px;height:34px;border:0;border-radius:10px;background:rgba(255,255,255,.18);
+  color:#fff;font-size:20px;line-height:1;display:grid;place-items:center}
+header .nav:active{background:rgba(255,255,255,.35)}
+header .title{flex:1;text-align:center;min-width:0}
+header .title b{display:block;font-size:17px;font-weight:600}
+header .title span{display:block;font-size:11px;opacity:.85;margin-top:1px}
+
+.board{margin:10px;background:#fff;border-radius:14px;overflow-x:auto;
+  box-shadow:0 2px 12px rgba(30,40,90,.07);-webkit-overflow-scrolling:touch}
+.board-inner{min-width:760px}
+.head-row{display:flex;border-bottom:1px solid var(--line)}
+.corner{width:46px;flex:0 0 46px}
+.day-head{flex:1 0 100px;padding:8px 0 7px;text-align:center;font-size:13px;font-weight:600;color:#495067}
+.day-head em{display:block;font-style:normal;font-size:10px;font-weight:400;color:var(--sub);margin-top:2px}
+.day-head.today{color:var(--brand)}
+.day-head.today em{color:var(--brand)}
+.body-row{display:flex}
+.time-col{width:46px;flex:0 0 46px}
+.time-cell{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  border-top:1px solid var(--line);color:var(--sub);font-size:9px}
+.time-cell:first-child{border-top:0}
+.time-cell b{font-size:12px;color:#6b7288;font-weight:600}
+.day-col{flex:1 0 100px;position:relative;border-left:1px solid var(--line)}
+.course{position:absolute;left:2px;right:2px;border-radius:8px;padding:4px 5px;color:#fff;
+  overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.14)}
+.course .n{font-size:11px;font-weight:600;line-height:1.25;
+  display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;word-break:break-all}
+.course .s{font-size:9.5px;opacity:.94;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.fab{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));
+  width:56px;height:56px;border:0;border-radius:50%;z-index:30;
+  background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;font-size:28px;line-height:1;
+  box-shadow:0 8px 22px rgba(79,110,247,.45)}
+.fab:active{transform:scale(.94)}
+
+.mask{position:fixed;inset:0;z-index:100;background:rgba(16,20,40,.45);
+  display:none;align-items:flex-end;justify-content:center}
+.mask.open{display:flex}
+.sheet{width:100%;max-width:560px;max-height:90vh;overflow-y:auto;background:#fff;
+  border-radius:18px 18px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));
+  animation:up .2s ease}
+@keyframes up{from{transform:translateY(30px);opacity:.5}to{transform:none;opacity:1}}
+.sheet h3{margin:2px 0 14px;font-size:16px;text-align:center}
+.sheet label{display:block;margin-bottom:10px;font-size:12px;color:#6b7288}
+.sheet label input,.sheet label select,.sheet label textarea{
+  display:block;width:100%;margin-top:5px;padding:9px 10px;border:1px solid #e3e6ef;border-radius:10px;
+  background:#f8f9fc;font-size:14px;color:var(--text);font-family:inherit}
+.sheet label textarea{resize:vertical;min-height:130px;font-size:13px;line-height:1.7}
+.sheet input:focus,.sheet select:focus,.sheet textarea:focus{outline:none;border-color:var(--brand);background:#fff}
+.row{display:flex;gap:10px}
+.row>label{flex:1}
+.colors{display:flex;flex-wrap:wrap;gap:8px;margin-top:7px}
+.sw{width:30px;height:30px;border-radius:50%;border:2px solid transparent}
+.sw.on{border-color:#1c2033;transform:scale(1.08)}
+.actions{display:flex;gap:8px;margin-top:12px}
+.btn{flex:1;padding:12px;border:0;border-radius:12px;font-size:15px;font-weight:600}
+.btn.primary{background:var(--brand);color:#fff}
+.btn.ghost{background:#eef0f5;color:#5a6178}
+.btn.danger{background:#ffe8e8;color:#e04a4a;flex:0 0 76px}
+.btn:active{opacity:.85}
+.tip{font-size:11px;color:var(--sub);margin:-4px 0 12px;line-height:1.6}
+</style>
+</head>
+<body>
+
+<header>
+  <button class="nav" id="prev">‹</button>
+  <div class="title" id="titleBox">
+    <b id="weekLabel">第 1 周</b>
+    <span id="dateLabel"></span>
+  </div>
+  <button class="nav" id="next">›</button>
+  <button class="nav" id="gear">⚙</button>
+</header>
+
+<div class="board">
+  <div class="board-inner">
+    <div class="head-row" id="headRow"></div>
+    <div class="body-row" id="bodyRow"></div>
+  </div>
+</div>
+
+<button class="fab" id="add">+</button>
+
+<!-- 课程编辑 -->
+<div class="mask" id="editor">
+  <div class="sheet">
+    <h3 id="modalTitle">添加课程</h3>
+    <label>课程名称<input id="f-name" placeholder="例如：高等数学" autocomplete="off"></label>
+    <label>星期<select id="f-day"></select></label>
+    <div class="row">
+      <label>开始节次<select id="f-start"></select></label>
+      <label>结束节次<select id="f-end"></select></label>
+    </div>
+    <label>上课周次<input id="f-weeks" placeholder="1-16 或 1-16/2（单周）或 1,3,5" autocomplete="off"></label>
+    <div class="tip">连续写 1-16；/2 表示隔周（1-10/2 = 双周）；也可写 1,3,5,7</div>
+    <div class="row">
+      <label>教师<input id="f-teacher" placeholder="选填" autocomplete="off"></label>
+      <label>教室<input id="f-room" placeholder="选填" autocomplete="off"></label>
+    </div>
+    <label>颜色<div class="colors" id="f-colors"></div></label>
+    <div class="actions">
+      <button class="btn ghost" id="btnCancel">取消</button>
+      <button class="btn danger" id="btnDelete">删除</button>
+      <button class="btn primary" id="btnSave">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 设置 -->
+<div class="mask" id="settings">
+  <div class="sheet">
+    <h3>设置</h3>
+    <label>第 1 周周一日期<input type="date" id="s-start"></label>
+    <label>学期总周数<input type="number" id="s-weeks" min="1" max="60"></label>
+    <label>每天节次时间（每行一节，格式 08:05-08:50）
+      <textarea id="s-periods" spellcheck="false"></textarea>
+    </label>
+    <div class="actions">
+      <button class="btn ghost" id="btnExport">导出备份</button>
+      <button class="btn ghost" id="btnImport">导入备份</button>
+    </div>
+    <div class="actions">
+      <button class="btn ghost" id="btnReset">恢复默认课表</button>
+    </div>
+    <div class="actions">
+      <button class="btn ghost" id="btnCancelSettings">取消</button>
+      <button class="btn primary" id="btnSaveSettings">保存</button>
+    </div>
+    <input type="file" id="fileInput" accept=".json,application/json" hidden>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+const STORE = 'timetable_v1';
+const H = 62;
+const DAY_NAMES = ['周一','周二','周三','周四','周五','周六','周日'];
+const PALETTE = ['#5B8FF9','#61DDAA','#F6BD16','#7262FD','#78D3F8','#9661BC','#F6903D','#008685','#F08BB4','#FF6B6B','#5D7092'];
+
+const $ = s => document.querySelector(s);
+const pad = n => String(n).padStart(2,'0');
+const toISO = d => d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const addDays = (iso,n) => { const d = new Date(iso+'T00:00:00'); d.setDate(d.getDate()+n); return d; };
+const esc = s => String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+
+function mondayThisWeek(){
+  const d = new Date();
+  const wd = d.getDay() || 7;
+  d.setDate(d.getDate() - wd + 1);
+  return toISO(d);
+}
+
+/* 周次表达式 -> 数组 */
+function parseWeeks(str){
+  const set = new Set();
+  String(str||'').split(/[,，]/).forEach(function(part){
+    part = part.trim();
+    if(!part) return;
+    const seg = part.split('/');
+    const step = Math.max(1, parseInt(seg[1],10) || 1);
+    const m = seg[0].trim().match(/^(\d+)\s*[-~－]\s*(\d+)$/);
+    if(m){
+      for(let i=+m[1]; i<=+m[2]; i+=step) set.add(i);
+    } else if(/^\d+$/.test(seg[0].trim())){
+      set.add(+seg[0].trim());
+    }
+  });
+  return [...set].sort(function(a,b){return a-b;});
+}
+
+/* 数组 -> 周次表达式 */
+function formatWeeks(arr){
+  if(!arr || !arr.length) return '';
+  const a = [...arr].sort(function(x,y){return x-y;});
+  const out = [];
+  let s = a[0], p = a[0];
+  for(let i=1;i<a.length;i++){
+    if(a[i]===p+1){ p = a[i]; continue; }
+    out.push(s===p ? String(s) : s+'-'+p);
+    s = p = a[i];
+  }
+  out.push(s===p ? String(s) : s+'-'+p);
+  return out.join(',');
+}
+
+/* ---------- 默认课表（按图片导入，第1周周一切为2026-09-07） ---------- */
+function defaultState(){
+  const P = parseWeeks;
+  return {
+    startDate: '2026-09-07',   // 第1周周一，这样第5周是10月5日-10月11日
+    totalWeeks: 20,
+    periods: [
+      {s:'08:05',e:'08:50'},
+      {s:'09:00',e:'09:45'},
+      {s:'10:00',e:'10:45'},
+      {s:'10:55',e:'11:40'},
+      {s:'14:25',e:'15:10'},
+      {s:'15:20',e:'16:05'},
+      {s:'16:15',e:'17:00'},
+      {s:'17:10',e:'17:55'},
+      {s:'19:30',e:'20:15'},
+      {s:'20:25',e:'21:10'}
+    ],
+    courses: [
+      // 管理学基础B
+      {id:'m1',name:'管理学基础B',day:1,start:1,end:2,weeks:P('4-11'),room:'D107',teacher:'曾健',color:'#5B8FF9'},
+      {id:'m2',name:'管理学基础B',day:2,start:1,end:2,weeks:P('4-11'),room:'D204',teacher:'曾健',color:'#5B8FF9'},
+      // 高职英语1
+      {id:'e1',name:'高职英语1',day:1,start:3,end:4,weeks:P('4-15'),room:'B111',teacher:'唐莉',color:'#61DDAA'},
+      {id:'e2',name:'高职英语1',day:4,start:3,end:4,weeks:P('4-15'),room:'B109',teacher:'唐莉',color:'#61DDAA'},
+      // 大学语文
+      {id:'y1',name:'大学语文',day:1,start:5,end:6,weeks:P('4-15'),room:'B316',teacher:'邹超才',color:'#F6BD16'},
+      {id:'y2',name:'大学语文',day:5,start:3,end:4,weeks:P('4-10/2'),room:'B302(新)',teacher:'邹超才',color:'#F6BD16'},
+      // 毛泽东思想和中国特色社会主义理论体系概论
+      {id:'p1',name:'毛泽东思想和中国特色社会主义理论体系概论',day:2,start:3,end:4,weeks:P('5-12'),room:'C105',teacher:'徐兴兴',color:'#7262FD'},
+      {id:'p2',name:'毛泽东思想和中国特色社会主义理论体系概论',day:4,start:5,end:6,weeks:P('5-12'),room:'D203',teacher:'徐兴兴',color:'#7262FD'},
+      // 思想道德与法治
+      {id:'z1',name:'思想道德与法治',day:2,start:9,end:10,weeks:P('4-15'),room:'C201',teacher:'王波',color:'#78D3F8'},
+      // 大学生心理健康教育
+      {id:'x1',name:'大学生心理健康教育',day:3,start:3,end:4,weeks:P('4-9'),room:'D204',teacher:'何晓清',color:'#9661BC'},
+      // 商务礼仪与沟通
+      {id:'b1',name:'商务礼仪与沟通',day:3,start:5,end:8,weeks:P('9-16'),room:'B505形体礼仪实训室',teacher:'刘娟娟',color:'#F6903D'},
+      // 大学生就业指导1
+      {id:'j1',name:'大学生就业指导1',day:4,start:1,end:2,weeks:P('9-12'),room:'B202',teacher:'简富广',color:'#008685'},
+      // 形势与政策
+      {id:'s1',name:'形势与政策',day:4,start:7,end:8,weeks:P('5-8'),room:'A212',teacher:'丁家龙',color:'#F08BB4'},
+      // 军事理论
+      {id:'u1',name:'军事理论',day:4,start:9,end:10,weeks:P('4-8'),room:'C201',teacher:'王波',color:'#5D7092'},
+      // 体育与健康1
+      {id:'t1',name:'体育与健康1',day:5,start:1,end:2,weeks:P('4-15'),room:'体育场',teacher:'易志华',color:'#FF6B6B'}
+    ],
+    viewWeek: 1
+  };
+}
+
+/* ---------- 状态 ---------- */
+let state = null;
+
+function load(){
+  let saved = null;
+  try{ saved = JSON.parse(localStorage.getItem(STORE) || 'null'); }catch(e){}
+  if(saved && typeof saved === 'object' && Array.isArray(saved.courses)){
+    state = {
+      startDate : saved.startDate || '2026-09-07',
+      totalWeeks: saved.totalWeeks || 20,
+      periods   : (Array.isArray(saved.periods) && saved.periods.length) ? saved.periods : defaultState().periods,
+      courses   : saved.courses,
+      viewWeek  : 1
+    };
+  }else{
+    state = defaultState();
+    save();
+  }
+}
+
+function save(){
+  try{ localStorage.setItem(STORE, JSON.stringify(state)); }
+  catch(e){ console.warn('保存失败', e); }
+}
+
+function currentWeek(){
+  if(!state.startDate) return 1;
+  const start = new Date(state.startDate + 'T00:00:00');
+  const now = new Date(); now.setHours(0,0,0,0);
+  const days = Math.round((now - start) / 86400000);
+  return Math.max(1, Math.min(state.totalWeeks, Math.floor(days/7) + 1));
+}
+
+/* ---------- 渲染 ---------- */
+function render(){
+  const week = state.viewWeek;
+  const N = state.periods.length;
+  const monday = addDays(state.startDate, (week-1)*7);
+  const sunday = addDays(state.startDate, (week-1)*7 + 6);
+  const todayISO = toISO(new Date());
+
+  $('#weekLabel').textContent = '第 ' + week + ' 周';
+  $('#dateLabel').textContent = (monday.getMonth()+1)+'月'+monday.getDate()+'日 - '
+                              + (sunday.getMonth()+1)+'月'+sunday.getDate()+'日';
+
+  // 星期表头
+  let head = '<div class="corner"></div>';
+  for(let i=0;i<7;i++){
+    const d = addDays(state.startDate, (week-1)*7 + i);
+    const cls = toISO(d) === todayISO ? ' today' : '';
+    head += '<div class="day-head'+cls+'">'+DAY_NAMES[i]+'<em>'+(d.getMonth()+1)+'/'+d.getDate()+'</em></div>';
+  }
+  $('#headRow').innerHTML = head;
+
+  // 节次时间列
+  let timeCells = '';
+  state.periods.forEach(function(p,i){
+    timeCells += '<div class="time-cell" style="height:'+H+'px"><b>'+(i+1)+'</b><span>'+p.s+'</span><span>'+p.e+'</span></div>';
+  });
+
+  // 每天一列
+  let cols = '<div class="time-col">'+timeCells+'</div>';
+  for(let day=1; day<=7; day++){
+    const d = addDays(state.startDate, (week-1)*7 + day - 1);
+    const isToday = toISO(d) === todayISO;
+    let html = '<div class="day-col" style="height:'+(N*H)+'px;'
+             + 'background-image:linear-gradient(to bottom,#eef0f5 0 1px,transparent 1px);'
+             + 'background-size:100% '+H+'px;'
+             + (isToday ? 'background-color:#f7f9ff;' : '') + '">';
+
+    state.courses
+      .filter(function(c){ return c.day === day && Array.isArray(c.weeks) && c.weeks.indexOf(week) > -1; })
+      .forEach(function(c){
+        const top = (c.start-1)*H + 2;
+        const h = (c.end - c.start + 1)*H - 4;
+        const subs = [c.room, c.teacher].filter(Boolean)
+          .map(function(t){ return '<div class="s">'+esc(t)+'</div>'; }).join('');
+        html += '<div class="course" data-id="'+c.id+'" style="top:'+top+'px;height:'+h+'px;background:'
+              + (c.color || '#5B8FF9') + '">'
+              + '<div class="n">'+esc(c.name)+'</div>' + subs + '</div>';
+      });
+    html += '</div>';
+    cols += html;
+  }
+  $('#bodyRow').innerHTML = cols;
+}
+
+/* ---------- 编辑弹窗 ---------- */
+let editingId = null;
+let pickedColor = PALETTE[0];
+
+function fillSelects(){
+  const N = state.periods.length;
+  $('#f-day').innerHTML = DAY_NAMES.map(function(d,i){
+    return '<option value="'+(i+1)+'">'+d+'</option>';
+  }).join('');
+  const opts = Array.from({length:N}, function(_,i){
+    return '<option value="'+(i+1)+'">第 '+(i+1)+' 节</option>';
+  }).join('');
+  $('#f-start').innerHTML = opts;
+  $('#f-end').innerHTML = opts;
+}
+
+function renderColors(){
+  $('#f-colors').innerHTML = PALETTE.map(function(c){
+    return '<button type="button" class="sw'+(c===pickedColor?' on':'')+'" data-c="'+c+'" style="background:'+c+'"></button>';
+  }).join('');
+}
+
+function openEditor(course){
+  fillSelects();
+  editingId = course ? course.id : null;
+  $('#modalTitle').textContent = course ? '编辑课程' : '添加课程';
+  $('#f-name').value = course ? course.name : '';
+  $('#f-day').value = course ? course.day : 1;
+  $('#f-start').value = course ? course.start : 1;
+  $('#f-end').value = course ? course.end : 2;
+  $('#f-weeks').value = course ? formatWeeks(course.weeks) : ('1-' + state.totalWeeks);
+  $('#f-teacher').value = course ? (course.teacher || '') : '';
+  $('#f-room').value = course ? (course.room || '') : '';
+  pickedColor = course ? (course.color || PALETTE[0]) : PALETTE[state.courses.length % PALETTE.length];
+  renderColors();
+  $('#btnDelete').style.display = course ? '' : 'none';
+  $('#editor').classList.add('open');
+}
+
+function saveCourse(){
+  const name = $('#f-name').value.trim();
+  if(!name) return alert('请输入课程名称');
+
+  let start = +$('#f-start').value;
+  let end   = +$('#f-end').value;
+  if(end < start){ const t = start; start = end; end = t; }
+
+  const weeks = parseWeeks($('#f-weeks').value);
+  if(!weeks.length) return alert('周次格式不对，示例：1-16 或 4-10/2（双周）或 1,3,5');
+
+  const data = {
+    name: name,
+    day: +$('#f-day').value,
+    start: start,
+    end: end,
+    weeks: weeks,
+    teacher: $('#f-teacher').value.trim(),
+    room: $('#f-room').value.trim(),
+    color: pickedColor
+  };
+
+  if(editingId){
+    const c = state.courses.find(function(x){ return x.id === editingId; });
+    if(c) Object.assign(c, data);
+  }else{
+    data.id = 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+    state.courses.push(data);
+  }
+  save();
+  $('#editor').classList.remove('open');
+  render();
+}
+
+/* ---------- 事件绑定 ---------- */
+$('#prev').onclick = function(){ state.viewWeek = Math.max(1, state.viewWeek-1); save(); render(); };
+$('#next').onclick = function(){ state.viewWeek = Math.min(state.totalWeeks, state.viewWeek+1); save(); render(); };
+$('#titleBox').onclick = function(){ state.viewWeek = currentWeek(); save(); render(); };
+$('#add').onclick = function(){ openEditor(null); };
+
+$('#bodyRow').addEventListener('click', function(e){
+  const el = e.target.closest('.course');
+  if(!el) return;
+  const c = state.courses.find(function(x){ return x.id === el.dataset.id; });
+  if(c) openEditor(c);
+});
+
+$('#f-colors').addEventListener('click', function(e){
+  const b = e.target.closest('.sw');
+  if(!b) return;
+  pickedColor = b.dataset.c;
+  renderColors();
+});
+
+$('#btnSave').onclick = saveCourse;
+$('#btnCancel').onclick = function(){ $('#editor').classList.remove('open'); };
+$('#btnDelete').onclick = function(){
+  if(!editingId) return;
+  if(!confirm('确定删除这节课吗？')) return;
+  state.courses = state.courses.filter(function(c){ return c.id !== editingId; });
+  save();
+  $('#editor').classList.remove('open');
+  render();
+};
+
+/* 设置 */
+$('#gear').onclick = function(){
+  $('#s-start').value = state.startDate;
+  $('#s-weeks').value = state.totalWeeks;
+  $('#s-periods').value = state.periods.map(function(p){ return p.s + '-' + p.e; }).join('\n');
+  $('#settings').classList.add('open');
+};
+
+$('#btnCancelSettings').onclick = function(){ $('#settings').classList.remove('open'); };
+
+$('#btnSaveSettings').onclick = function(){
+  const sd = $('#s-start').value;
+  if(!sd) return alert('请选择第 1 周周一的日期');
+  const tw = Math.max(1, Math.min(60, parseInt($('#s-weeks').value,10) || 20));
+
+  const periods = $('#s-periods').value.split('\n')
+    .map(function(l){ return l.trim(); })
+    .filter(Boolean)
+    .map(function(l){
+      const m = l.match(/^(\d{1,2}:\d{2})\s*[-~到至]\s*(\d{1,2}:\d{2})$/);
+      return m ? { s: m[1], e: m[2] } : null;
+    })
+    .filter(Boolean);
+  if(!periods.length) return alert('节次时间格式有误，每行形如 08:05-08:50');
+
+  state.startDate = sd;
+  state.totalWeeks = tw;
+  state.periods = periods;
+  state.viewWeek = currentWeek();
+  save();
+  $('#settings').classList.remove('open');
+  render();
+};
+
+/* 恢复默认课表 */
+$('#btnReset').onclick = function(){
+  if(!confirm('将恢复为图片中的原始课表，你手动添加/修改的内容会丢失，确定吗？')) return;
+  const keepStart = state.startDate;
+  const keepWeeks = state.totalWeeks;
+  state = defaultState();
+  state.startDate = keepStart;
+  state.totalWeeks = keepWeeks;
+  state.viewWeek = currentWeek();
+  save();
+  $('#settings').classList.remove('open');
+  render();
+};
+
+/* 备份 */
+$('#btnExport').onclick = function(){
+  const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '课表备份.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000);
+};
+
+$('#btnImport').onclick = function(){ $('#fileInput').click(); };
+
+$('#fileInput').onchange = function(e){
+  const f = e.target.files[0];
+  if(!f) return;
+  const r = new FileReader();
+  r.onload = function(){
+    try{
+      const d = JSON.parse(r.result);
+      if(!d || !Array.isArray(d.courses)) throw new Error('文件格式不对');
+      if(d.startDate) state.startDate = d.startDate;
+      if(d.totalWeeks) state.totalWeeks = d.totalWeeks;
+      if(Array.isArray(d.periods) && d.periods.length) state.periods = d.periods;
+      state.courses = d.courses;
+      state.viewWeek = currentWeek();
+      save();
+      $('#settings').classList.remove('open');
+      render();
+      alert('导入成功');
+    }catch(err){ alert('导入失败：' + err.message); }
+  };
+  r.readAsText(f);
+  e.target.value = '';
+};
+
+/* 点遮罩关闭 */
+document.querySelectorAll('.mask').forEach(function(m){
+  m.addEventListener('click', function(e){ if(e.target === m) m.classList.remove('open'); });
+});
+
+/* ---------- 启动 ---------- */
+load();
+if(!state.startDate){ state.startDate = mondayThisWeek(); save(); }
+state.viewWeek = currentWeek();
+render();
+
+})();
+</script>
+</body>
+</html>
