@@ -3,37 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#4f6ef7">
+<meta name="theme-color" content="#f8c8dc">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>思灵课表</title>
 <style>
-:root{--brand:#4f6ef7;--brand2:#6a8dff;--line:#f0f2f7;--text:#1c2033;--sub:#9aa1b5}
+:root{--brand:#89b4f8;--line:#f0f2f7;--text:#2c3e50;--sub:#9aa1b5}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%}
 body{font:13px/1.3 -apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;
-  background:#f5f6fa;color:var(--text);overscroll-behavior-y:contain}
+  background:#fdfbfb;color:var(--text);overscroll-behavior-y:contain}
 button{font-family:inherit}
 
+/* 顶部浪漫渐变 */
 header{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:4px;
   padding:calc(env(safe-area-inset-top,0px) + 10px) 10px 10px;
-  background:linear-gradient(135deg,#89b4f8,#a1c4fd);color:#fff;
-  box-shadow:0 4px 16px rgba(137,180,248,.3)}
-header .nav{width:32px;height:32px;border:0;border-radius:10px;background:rgba(255,255,255,.25);
+  background:linear-gradient(135deg,#ffb7b2,#f8c8dc);color:#fff;
+  box-shadow:0 4px 16px rgba(248,200,220,.4)}
+header .nav{width:32px;height:32px;border:0;border-radius:10px;background:rgba(255,255,255,.3);
   color:#fff;font-size:18px;line-height:1;display:grid;place-items:center}
-header .nav:active{background:rgba(255,255,255,.4)}
+header .nav:active{background:rgba(255,255,255,.5)}
 header .title{flex:1;text-align:center;min-width:0}
 header .title b{display:block;font-size:16px;font-weight:600}
 header .title span{display:block;font-size:10px;opacity:.9;margin-top:1px}
 
-.board{margin:8px;background:#fff;border-radius:12px;overflow-x:hidden;
-  box-shadow:0 2px 12px rgba(30,40,90,.06)}
+/* 表格圆润化 */
+.board{margin:8px;background:#fff;border-radius:16px;overflow-x:hidden;
+  box-shadow:0 4px 16px rgba(248,200,220,.15)}
 .board-inner{width:100%; min-width: 100%;}
 .head-row{display:flex;border-bottom:1px solid var(--line)}
 .corner{width:32px;flex:0 0 32px}
 .day-head{flex:1;padding:6px 0 5px;text-align:center;font-size:11px;font-weight:600;color:#495067;white-space: nowrap;}
 .day-head em{display:block;font-style:normal;font-size:9px;font-weight:400;color:var(--sub);margin-top:1px}
-.day-head.today{color:var(--brand)}
-.day-head.today em{color:var(--brand)}
+.day-head.today{color:#ff8fa3}
+.day-head.today em{color:#ff8fa3}
 .body-row{display:flex}
 .time-col{width:32px;flex:0 0 32px}
 .time-cell{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
@@ -41,47 +43,107 @@ header .title span{display:block;font-size:10px;opacity:.9;margin-top:1px}
 .time-cell:first-child{border-top:0}
 .time-cell b{font-size:10px;color:#6b7288;font-weight:600}
 .day-col{flex:1;position:relative;border-left:1px solid var(--line); min-width: 0;}
-.course{position:absolute;left:1px;right:1px;border-radius:6px;padding:3px 2px;color:#2c3e50;
-  overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-.course .n{font-size:9.5px;font-weight:600;line-height:1.2;
+/* 马卡龙课程块 (圆角加大，增加微小弹跳动画) */
+.course{position:absolute;left:1.5px;right:1.5px;border-radius:10px;padding:4px 3px;color:#2c3e50;
+  overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.06);transition:transform .2s ease}
+.course:active{transform:scale(.96)}
+.course .n{font-size:9.5px;font-weight:600;line-height:1.25;
   display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;word-break:break-all}
 .course .s{font-size:8px;opacity:.85;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
+/* 悬浮按钮变成爱心粉 */
 .fab{position:fixed;right:15px;bottom:calc(15px + env(safe-area-inset-bottom,0px));
   width:50px;height:50px;border:0;border-radius:50%;z-index:30;
-  background:linear-gradient(135deg,#89b4f8,#a1c4fd);color:#fff;font-size:26px;line-height:1;
-  box-shadow:0 6px 18px rgba(137,180,248,.5)}
+  background:linear-gradient(135deg,#ffb7b2,#f8c8dc);color:#fff;font-size:26px;line-height:1;
+  box-shadow:0 6px 18px rgba(248,200,220,.6)}
 .fab:active{transform:scale(.94)}
 
+/* 底部编辑面板 */
 .mask{position:fixed;inset:0;z-index:100;background:rgba(16,20,40,.45);
   display:none;align-items:flex-end;justify-content:center}
 .mask.open{display:flex}
 .sheet{width:100%;max-width:560px;max-height:90vh;overflow-y:auto;background:#fff;
-  border-radius:18px 18px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));
-  animation:up .2s ease}
-@keyframes up{from{transform:translateY(30px);opacity:.5}to{transform:none;opacity:1}}
-.sheet h3{margin:2px 0 14px;font-size:16px;text-align:center}
+  border-radius:24px 24px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));
+  animation:up .3s cubic-bezier(0.175, 0.885, 0.32, 1.275)}
+@keyframes up{from{transform:translateY(50px);opacity:.5}to{transform:none;opacity:1}}
+.sheet h3{margin:2px 0 14px;font-size:16px;text-align:center;color:#495067}
 .sheet label{display:block;margin-bottom:10px;font-size:12px;color:#6b7288}
 .sheet label input,.sheet label select,.sheet label textarea{
-  display:block;width:100%;margin-top:5px;padding:9px 10px;border:1px solid #e3e6ef;border-radius:10px;
+  display:block;width:100%;margin-top:5px;padding:10px 12px;border:1px solid #e3e6ef;border-radius:12px;
   background:#f8f9fc;font-size:14px;color:var(--text);font-family:inherit}
 .sheet label textarea{resize:vertical;min-height:130px;font-size:13px;line-height:1.7}
-.sheet input:focus,.sheet select:focus,.sheet textarea:focus{outline:none;border-color:var(--brand);background:#fff}
+.sheet input:focus,.sheet select:focus,.sheet textarea:focus{outline:none;border-color:#ffb7b2;background:#fff}
 .row{display:flex;gap:10px}
 .row>label{flex:1}
 .colors{display:flex;flex-wrap:wrap;gap:8px;margin-top:7px}
-.sw{width:30px;height:30px;border-radius:50%;border:2px solid transparent}
-.sw.on{border-color:#1c2033;transform:scale(1.08)}
+.sw{width:30px;height:30px;border-radius:50%;border:2px solid transparent;transition:all .2s}
+.sw.on{border-color:#ff8fa3;transform:scale(1.15)}
 .actions{display:flex;gap:8px;margin-top:12px}
-.btn{flex:1;padding:12px;border:0;border-radius:12px;font-size:15px;font-weight:600}
-.btn.primary{background:#89b4f8;color:#fff}
+.btn{flex:1;padding:12px;border:0;border-radius:14px;font-size:15px;font-weight:600}
+.btn.primary{background:linear-gradient(135deg,#ffb7b2,#f8c8dc);color:#fff;box-shadow:0 4px 10px rgba(248,200,220,.4)}
 .btn.ghost{background:#eef0f5;color:#5a6178}
 .btn.danger{background:#ffe8e8;color:#e04a4a;flex:0 0 76px}
 .btn:active{opacity:.85}
 .tip{font-size:11px;color:var(--sub);margin:-4px 0 12px;line-height:1.6}
+
+/* 🌟 浪漫弹窗专属样式 🌟 */
+#lovePopup .sheet {
+  background: linear-gradient(135deg, #fff0f5, #ffe4e1);
+  border-radius: 28px 28px 0 0;
+  text-align: center;
+  padding: 30px 20px calc(30px + env(safe-area-inset-bottom,0px));
+}
+#lovePopup img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  margin-bottom: 15px;
+  animation: heartBeat 1.2s infinite ease-in-out;
+}
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  15% { transform: scale(1.1); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.1); }
+  60% { transform: scale(1); }
+}
+#lovePopup h2 {
+  font-size: 20px;
+  color: #ff6b81;
+  margin: 0 0 20px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+.love-btns { display: flex; gap: 15px; justify-content: center; }
+.love-btns button {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-yes { background: linear-gradient(135deg, #ff9a9e, #fecfef); color: #fff; box-shadow: 0 6px 15px rgba(255, 154, 158, 0.4); }
+.btn-no { background: #fff; color: #ff6b81; border: 1px solid #ffb7b2; }
+.love-btns button:active { transform: scale(0.95); }
 </style>
 </head>
 <body>
+
+<!-- 🌟 开屏猫猫弹窗 🌟 -->
+<div class="mask open" id="lovePopup">
+  <div class="sheet">
+    <!-- 请确保在 assets 文件夹里上传了名为 cat.png 的图片 -->
+    <img src="cat.png" alt="猫猫" onerror="this.style.display='none'">
+    <h2 id="loveText">今天有没有想宁~</h2>
+    <div class="love-btns" id="loveBtns">
+      <button class="btn-yes" onclick="loveReply('yes')">想啦🥰</button>
+      <button class="btn-no" onclick="loveReply('no')">一点点😤</button>
+    </div>
+  </div>
+</div>
 
 <header>
   <button class="nav" id="prev">‹</button>
@@ -155,21 +217,34 @@ header .title span{display:block;font-size:10px;opacity:.9;margin-top:1px}
 (function(){
 'use strict';
 
+// 🌟 浪漫互动逻辑 🌟
+window.loveReply = function(type) {
+  const h2 = document.getElementById('loveText');
+  const btns = document.getElementById('loveBtns');
+  if (type === 'yes') {
+    h2.textContent = '超乖！奖励一个亲亲😘';
+    btns.style.display = 'none';
+    setTimeout(() => {
+      document.getElementById('lovePopup').classList.remove('open');
+    }, 1500);
+  } else {
+    h2.textContent = '哼，那再想一会儿！😤';
+    // 撒娇抖动效果
+    const img = document.querySelector('#lovePopup img');
+    if (img) {
+      img.style.animation = 'none';
+      setTimeout(() => { img.style.animation = 'heartBeat 0.5s infinite'; }, 10);
+    }
+  }
+};
+
 const STORE = 'timetable_v1';
-const H = 50; // 行高缩小，让10节课能在一屏显示更多
+const H = 50;
 const DAY_NAMES = ['周一','周二','周三','周四','周五','周六','周日'];
-// 马卡龙配色 (低饱和度、高明度，字体用深色保证清晰)
+// 马卡龙配色
 const PALETTE = [
-  '#FFB7B2', // 马卡龙粉
-  '#FFDAC1', // 马卡龙橘
-  '#E2F0CB', // 马卡龙绿
-  '#B5EAD7', // 薄荷绿
-  '#C7CEEA', // 马卡龙蓝
-  '#F8C8DC', // 樱花粉
-  '#A8E6CF', // 蒂芙尼蓝
-  '#FDCFDF', // 婴儿粉
-  '#B8E0D2', // 鼠尾草绿
-  '#D4A5A5'  // 豆沙红
+  '#FFB7B2', '#FFDAC1', '#E2F0CB', '#B5EAD7', '#C7CEEA',
+  '#F8C8DC', '#A8E6CF', '#FDCFDF', '#B8E0D2', '#D4A5A5'
 ];
 
 const $ = s => document.querySelector(s);
@@ -216,7 +291,6 @@ function formatWeeks(arr){
   return out.join(',');
 }
 
-// 默认状态 (首次打开才会有，之后会读取本地存储)
 function defaultState(){
   const P = parseWeeks;
   return {
@@ -311,7 +385,7 @@ function render(){
     let html = '<div class="day-col" style="height:'+(N*H)+'px;'
              + 'background-image:linear-gradient(to bottom,#f0f2f7 0 1px,transparent 1px);'
              + 'background-size:100% '+H+'px;'
-             + (isToday ? 'background-color:#f7f9ff;' : '') + '">';
+             + (isToday ? 'background-color:#fff5f7;' : '') + '">';
 
     state.courses
       .filter(function(c){ return c.day === day && Array.isArray(c.weeks) && c.weeks.indexOf(week) > -1; })
@@ -466,7 +540,7 @@ $('#btnSaveSettings').onclick = function(){
 };
 
 $('#btnReset').onclick = function(){
-  if(!confirm('将恢复为图片中的原始课表，你手动添加/修改的内容会丢失，确定吗？')) return;
+  if(!confirm('将恢复为原始课表，你手动添加/修改的内容会丢失，确定吗？')) return;
   const keepStart = state.startDate;
   const keepWeeks = state.totalWeeks;
   state = defaultState();
@@ -520,6 +594,15 @@ load();
 if(!state.startDate){ state.startDate = mondayThisWeek(); save(); }
 state.viewWeek = currentWeek();
 render();
+
+// 当 App 从后台切回前台时，自动跳转当前周
+document.addEventListener('visibilitychange', function() {
+    if (!document.hidden) {
+        state.viewWeek = currentWeek();
+        save();
+        render();
+    }
+});
 
 })();
 </script>
