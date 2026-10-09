@@ -70,9 +70,14 @@ header .title span{display:block;font-size:10px;opacity:.9;margin-top:1px}
 .sheet input:focus,.sheet select:focus,.sheet textarea:focus{outline:none;border-color:#ffb7b2;background:#fff}
 .row{display:flex;gap:10px}
 .row>label{flex:1}
-.colors{display:flex;flex-wrap:wrap;gap:8px;margin-top:7px}
-.sw{width:30px;height:30px;border-radius:50%;border:2px solid transparent;transition:all .2s}
+
+/* 颜色选择区域（独立于 label） */
+.field-block{margin-bottom:10px}
+.field-label{display:block;margin-bottom:5px;font-size:12px;color:#6b7288}
+.colors{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+.sw{width:30px;height:30px;border-radius:50%;border:2px solid transparent;transition:all .2s;padding:0;cursor:pointer}
 .sw.on{border-color:#ff8fa3;transform:scale(1.15)}
+
 .actions{display:flex;gap:8px;margin-top:12px}
 .btn{flex:1;padding:12px;border:0;border-radius:14px;font-size:15px;font-weight:600}
 .btn.primary{background:linear-gradient(135deg,#ffb7b2,#f8c8dc);color:#fff;box-shadow:0 4px 10px rgba(248,200,220,.4)}
@@ -171,7 +176,11 @@ header .title span{display:block;font-size:10px;opacity:.9;margin-top:1px}
       <label>教师<input id="f-teacher" placeholder="选填" autocomplete="off"></label>
       <label>教室<input id="f-room" placeholder="选填" autocomplete="off"></label>
     </div>
-    <label>颜色<div class="colors" id="f-colors"></div></label>
+    <!-- 颜色选择从 label 里移出来，避免 WebView 兼容问题 -->
+    <div class="field-block">
+      <div class="field-label">颜色</div>
+      <div class="colors" id="f-colors"></div>
+    </div>
     <div class="actions">
       <button class="btn ghost" id="btnCancel">取消</button>
       <button class="btn danger" id="btnDelete">删除</button>
@@ -226,7 +235,6 @@ window.loveReply = function(type) {
   const img = document.querySelector('#lovePopup img');
   
   if (type === 'yes') {
-    // 点击“想啦”显示 cat1.gif
     if (img) img.src = 'cat1.gif';
     h2.textContent = '超乖！奖励一个亲亲😘';
     btns.style.display = 'none';
@@ -234,7 +242,6 @@ window.loveReply = function(type) {
       document.getElementById('lovePopup').classList.remove('open');
     }, 1500);
   } else {
-    // 点击“一点点”显示 dog.gif
     h2.textContent = '哼，那再想一会儿！😤';
     if (img) {
       img.src = 'dog.gif';
@@ -436,7 +443,7 @@ function fillSelects(){
 
 function renderColors(){
   $('#f-colors').innerHTML = PALETTE.map(function(c){
-    return '<button type="button" class="sw'+(c===pickedColor?' on':'')+'" data-c="'+c+'" style="background:'+c+'"></button>';
+    return '<button type="button" class="sw'+(c===pickedColor?' on':'')+'" data-color="'+c+'" style="background:'+c+'"></button>';
   }).join('');
 }
 
@@ -503,10 +510,13 @@ $('#bodyRow').addEventListener('click', function(e){
   if(c) openEditor(c);
 });
 
+// 修复：颜色选择用 preventDefault + stopPropagation，并使用 data-color 属性
 $('#f-colors').addEventListener('click', function(e){
+  e.preventDefault();
+  e.stopPropagation();
   const b = e.target.closest('.sw');
   if(!b) return;
-  pickedColor = b.dataset.c;
+  pickedColor = b.getAttribute('data-color');
   renderColors();
 });
 
