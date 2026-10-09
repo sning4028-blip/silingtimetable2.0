@@ -98,7 +98,15 @@ header .title span{display:block;font-size:10px;opacity:.9;margin-top:1px}
   height: 140px;
   object-fit: contain;
   margin-bottom: 15px;
-  /* 去掉了原有的心跳动画，避免和 GIF 冲突 */
+  /* 加回心跳缩放特效，让静图也能动起来 */
+  animation: heartBeat 1.2s infinite ease-in-out;
+}
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  15% { transform: scale(1.1); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.1); }
+  60% { transform: scale(1); }
 }
 #lovePopup h2 {
   font-size: 20px;
@@ -283,7 +291,7 @@ function formatWeeks(arr){
   return out.join(',');
 }
 
-// 精确修正后的默认状态
+// 精确修正后的默认状态 (结合了你的最新修改)
 function defaultState(){
   const P = parseWeeks;
   return {
@@ -303,7 +311,7 @@ function defaultState(){
       // 周二 (4-6双周、7-11周 管理学基础B)
       {id:'c4',name:'管理学基础B',day:2,start:1,end:2,weeks:P('4,6,7-11'),room:'D204',teacher:'曾健',color:'#C7CEEA'},
       {id:'c5',name:'毛泽东思想和中国特色社会主义理论体系概论',day:2,start:3,end:4,weeks:P('6-12'),room:'C105',teacher:'徐兴兴',color:'#F8C8DC'},
-      {id:'c6',name:'大学生心理健康教育',day:2,start:5,end:6,weeks:P('8'),room:'D204',teacher:'何晓清',color:'#E2F0CB'},
+      {id:'c6',name:'大学生心理健康教育',day:2,start:5,end:6,weeks:P('8'),room:'D204',teacher:'何晓清',color:'#E2F0CB'}, 
       {id:'c7',name:'思想道德与法治',day:2,start:9,end:10,weeks:P('6-16'),room:'C201',teacher:'王波',color:'#A8E6CF'},
       
       // 周三
@@ -322,10 +330,10 @@ function defaultState(){
       {id:'c16',name:'大学语文',day:5,start:3,end:4,weeks:P('4-10/2'),room:'B302(新)',teacher:'邹超才',color:'#FFDAC1'},
       {id:'c17',name:'毛泽东思想和中国特色社会主义理论体系概论',day:5,start:5,end:6,weeks:P('5-12'),room:'C101',teacher:'徐兴兴',color:'#F8C8DC'},
       
-      // 周六 (第6周补课)
+      // 周六 (第5周补课)
       {id:'c18',name:'大学生心理健康教育',day:6,start:3,end:4,weeks:P('5'),room:'D204',teacher:'何晓清',color:'#E2F0CB'},
       
-      // 周日 (第6周补课)
+      // 周日 (第2周补课 + 第6周补课)
       {id:'c19',name:'管理学基础B',day:7,start:1,end:2,weeks:P('6'),room:'D204',teacher:'曾健',color:'#C7CEEA'},
       {id:'c20',name:'毛泽东思想和中国特色社会主义理论体系概论',day:7,start:3,end:4,weeks:P('2'),room:'C105',teacher:'徐兴兴',color:'#F8C8DC'},
       {id:'c21',name:'思想道德与法治',day:7,start:9,end:10,weeks:P('2'),room:'C201',teacher:'王波',color:'#A8E6CF'}
