@@ -14,7 +14,6 @@ body{font:13px/1.3 -apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neu
   background:#fdfbfb;color:var(--text);overscroll-behavior-y:contain}
 button{font-family:inherit}
 
-/* 顶部浪漫渐变 */
 header{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:4px;
   padding:calc(env(safe-area-inset-top,0px) + 10px) 10px 10px;
   background:linear-gradient(135deg,#ffb7b2,#f8c8dc);color:#fff;
@@ -26,7 +25,6 @@ header .title{flex:1;text-align:center;min-width:0}
 header .title b{display:block;font-size:16px;font-weight:600}
 header .title span{display:block;font-size:10px;opacity:.9;margin-top:1px}
 
-/* 表格圆润化 */
 .board{margin:8px;background:#fff;border-radius:16px;overflow-x:hidden;
   box-shadow:0 4px 16px rgba(248,200,220,.15)}
 .board-inner{width:100%; min-width: 100%;}
@@ -43,7 +41,6 @@ header .title span{display:block;font-size:10px;opacity:.9;margin-top:1px}
 .time-cell:first-child{border-top:0}
 .time-cell b{font-size:10px;color:#6b7288;font-weight:600}
 .day-col{flex:1;position:relative;border-left:1px solid var(--line); min-width: 0;}
-/* 马卡龙课程块 */
 .course{position:absolute;left:1.5px;right:1.5px;border-radius:10px;padding:4px 3px;color:#2c3e50;
   overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.06);transition:transform .2s ease}
 .course:active{transform:scale(.96)}
@@ -51,14 +48,12 @@ header .title span{display:block;font-size:10px;opacity:.9;margin-top:1px}
   display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;word-break:break-all}
 .course .s{font-size:8px;opacity:.85;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-/* 悬浮按钮 */
 .fab{position:fixed;right:15px;bottom:calc(15px + env(safe-area-inset-bottom,0px));
   width:50px;height:50px;border:0;border-radius:50%;z-index:30;
   background:linear-gradient(135deg,#ffb7b2,#f8c8dc);color:#fff;font-size:26px;line-height:1;
   box-shadow:0 6px 18px rgba(248,200,220,.6)}
 .fab:active{transform:scale(.94)}
 
-/* 底部编辑面板 */
 .mask{position:fixed;inset:0;z-index:100;background:rgba(16,20,40,.45);
   display:none;align-items:flex-end;justify-content:center}
 .mask.open{display:flex}
@@ -86,7 +81,6 @@ header .title span{display:block;font-size:10px;opacity:.9;margin-top:1px}
 .btn:active{opacity:.85}
 .tip{font-size:11px;color:var(--sub);margin:-4px 0 12px;line-height:1.6}
 
-/* 🌟 浪漫弹窗专属样式 🌟 */
 #lovePopup .sheet {
   background: linear-gradient(135deg, #fff0f5, #ffe4e1);
   border-radius: 28px 28px 0 0;
@@ -98,7 +92,6 @@ header .title span{display:block;font-size:10px;opacity:.9;margin-top:1px}
   height: 140px;
   object-fit: contain;
   margin-bottom: 15px;
-  /* 心跳缩放特效，让静图也能动起来 */
   animation: heartBeat 1.2s infinite ease-in-out;
 }
 @keyframes heartBeat {
@@ -133,10 +126,8 @@ header .title span{display:block;font-size:10px;opacity:.9;margin-top:1px}
 </head>
 <body>
 
-<!-- 🌟 开屏猫猫弹窗 🌟 -->
 <div class="mask open" id="lovePopup">
   <div class="sheet">
-    <!-- 请确保在 assets 文件夹里上传了名为 cat.gif 和 dog.gif 的图片 -->
     <img src="cat.gif" alt="猫猫" onerror="this.style.display='none'">
     <h2 id="loveText">今天有没有想宁~</h2>
     <div class="love-btns" id="loveBtns">
@@ -165,7 +156,6 @@ header .title span{display:block;font-size:10px;opacity:.9;margin-top:1px}
 
 <button class="fab" id="add">+</button>
 
-<!-- 课程编辑 -->
 <div class="mask" id="editor">
   <div class="sheet">
     <h3 id="modalTitle">添加课程</h3>
@@ -190,7 +180,6 @@ header .title span{display:block;font-size:10px;opacity:.9;margin-top:1px}
   </div>
 </div>
 
-<!-- 设置 -->
 <div class="mask" id="settings">
   <div class="sheet">
     <h3>设置</h3>
@@ -210,7 +199,20 @@ header .title span{display:block;font-size:10px;opacity:.9;margin-top:1px}
       <button class="btn ghost" id="btnCancelSettings">取消</button>
       <button class="btn primary" id="btnSaveSettings">保存</button>
     </div>
-    <input type="file" id="fileInput" accept=".json,application/json" hidden>
+  </div>
+</div>
+
+<div class="mask" id="backupModal">
+  <div class="sheet">
+    <h3 id="backupTitle">导出备份</h3>
+    <div class="tip" id="backupTip">请复制以下内容，粘贴到备忘录里保存。</div>
+    <label>
+      <textarea id="backupText" spellcheck="false" placeholder="这里会显示备份数据..."></textarea>
+    </label>
+    <div class="actions">
+      <button class="btn ghost" id="btnBackupCancel">取消</button>
+      <button class="btn primary" id="btnBackupConfirm">复制数据</button>
+    </div>
   </div>
 </div>
 
@@ -218,20 +220,22 @@ header .title span{display:block;font-size:10px;opacity:.9;margin-top:1px}
 (function(){
 'use strict';
 
-// 🌟 浪漫互动逻辑 🌟
 window.loveReply = function(type) {
   const h2 = document.getElementById('loveText');
   const btns = document.getElementById('loveBtns');
+  const img = document.querySelector('#lovePopup img');
+  
   if (type === 'yes') {
+    // 点击“想啦”显示 cat1.gif
+    if (img) img.src = 'cat1.gif';
     h2.textContent = '超乖！奖励一个亲亲😘';
     btns.style.display = 'none';
     setTimeout(() => {
       document.getElementById('lovePopup').classList.remove('open');
     }, 1500);
   } else {
+    // 点击“一点点”显示 dog.gif
     h2.textContent = '哼，那再想一会儿！😤';
-    // 替换为 dog.gif
-    const img = document.querySelector('#lovePopup img');
     if (img) {
       img.src = 'dog.gif';
     }
@@ -241,7 +245,6 @@ window.loveReply = function(type) {
 const STORE = 'timetable_v1';
 const H = 50;
 const DAY_NAMES = ['周一','周二','周三','周四','周五','周六','周日'];
-// 马卡龙配色
 const PALETTE = [
   '#FFB7B2', '#FFDAC1', '#E2F0CB', '#B5EAD7', '#C7CEEA',
   '#F8C8DC', '#A8E6CF', '#FDCFDF', '#B8E0D2', '#D4A5A5'
@@ -291,7 +294,6 @@ function formatWeeks(arr){
   return out.join(',');
 }
 
-// 根据最新的教务系统文本，严格核对修正后的默认状态
 function defaultState(){
   const P = parseWeeks;
   return {
@@ -303,37 +305,30 @@ function defaultState(){
       {s:'19:30',e:'20:15'},{s:'20:25',e:'21:10'}
     ],
     courses: [
-      // 周一
       {id:'c1',name:'管理学基础B',day:1,start:1,end:2,weeks:P('4-11'),room:'D107',teacher:'曾健',color:'#C7CEEA'},
       {id:'c2',name:'高职英语1',day:1,start:3,end:4,weeks:P('4-15'),room:'B111',teacher:'唐莉',color:'#B5EAD7'},
       {id:'c3',name:'大学语文',day:1,start:5,end:6,weeks:P('4-15'),room:'B316',teacher:'邹超才',color:'#FFDAC1'},
       
-      // 周二 (4-6双周、7-11周 管理学基础B)
       {id:'c4',name:'管理学基础B',day:2,start:1,end:2,weeks:P('4,6,7-11'),room:'D204',teacher:'曾健',color:'#C7CEEA'},
       {id:'c5',name:'【调】毛泽东思想和中国特色社会主义理论体系概论',day:2,start:3,end:4,weeks:P('6-12'),room:'C105',teacher:'徐兴兴',color:'#F8C8DC'},
       {id:'c6',name:'【调】大学生心理健康教育',day:2,start:5,end:6,weeks:P('8'),room:'D204',teacher:'何晓清',color:'#E2F0CB'},
       {id:'c7',name:'思想道德与法治',day:2,start:9,end:10,weeks:P('6-16'),room:'C201',teacher:'王波',color:'#A8E6CF'},
       
-      // 周三
       {id:'c8',name:'【调】大学生心理健康教育',day:3,start:3,end:4,weeks:P('6-9'),room:'D204',teacher:'何晓清',color:'#E2F0CB'},
-      {id:'c9',name:'商务礼仪与沟通',day:3,start:5,end:8,weeks:P('9-16'),room:'图B505形体礼仪实训室',teacher:'刘娟娇',color:'#FFB7B2'}, // 修正教师与教室
+      {id:'c9',name:'商务礼仪与沟通',day:3,start:5,end:8,weeks:P('9-16'),room:'图B505形体礼仪实训室',teacher:'刘娟娇',color:'#FFB7B2'},
       
-      // 周四 (删除了5-6节的毛概，教务系统显示周四无5-6节)
       {id:'c10',name:'大学生就业指导1',day:4,start:1,end:2,weeks:P('9-12'),room:'B202',teacher:'简富广',color:'#D4A5A5'},
       {id:'c11',name:'高职英语1',day:4,start:3,end:4,weeks:P('4-15'),room:'B109',teacher:'唐莉',color:'#B5EAD7'},
       {id:'c13',name:'形势与政策',day:4,start:7,end:8,weeks:P('5-8'),room:'A212',teacher:'丁家龙',color:'#FDCFDF'},
       {id:'c14',name:'军事理论',day:4,start:9,end:10,weeks:P('4-8'),room:'C201',teacher:'王波',color:'#B8E0D2'},
       
-      // 周五 (4-10双周大学语文)
       {id:'c15',name:'体育与健康1',day:5,start:1,end:2,weeks:P('4-15'),room:'体育场1',teacher:'易志华',color:'#FFC3A0'},
       {id:'c16',name:'大学语文',day:5,start:3,end:4,weeks:P('4-10/2'),room:'B302(新)',teacher:'邹超才',color:'#FFDAC1'},
       {id:'c17',name:'【调】毛泽东思想和中国特色社会主义理论体系概论',day:5,start:5,end:6,weeks:P('5-12'),room:'C101',teacher:'徐兴兴',color:'#F8C8DC'},
       
-      // 周六 (第5周补课)
       {id:'c18',name:'【调】大学生心理健康教育',day:6,start:3,end:4,weeks:P('5'),room:'D204',teacher:'何晓清',color:'#E2F0CB'},
       
-      // 周日 (第2周补课)
-      {id:'c19',name:'管理学基础B',day:7,start:1,end:2,weeks:P('2'),room:'D204',teacher:'曾健',color:'#C7CEEA'}, // 修正为第2周
+      {id:'c19',name:'管理学基础B',day:7,start:1,end:2,weeks:P('2'),room:'D204',teacher:'曾健',color:'#C7CEEA'},
       {id:'c20',name:'【调】毛泽东思想和中国特色社会主义理论体系概论',day:7,start:3,end:4,weeks:P('2'),room:'C105',teacher:'徐兴兴',color:'#F8C8DC'},
       {id:'c21',name:'思想道德与法治',day:7,start:9,end:10,weeks:P('2'),room:'C201',teacher:'王波',color:'#A8E6CF'}
     ],
@@ -342,6 +337,7 @@ function defaultState(){
 }
 
 let state = null;
+let backupType = 'export';
 
 function load(){
   let saved = null;
@@ -517,7 +513,6 @@ $('#f-colors').addEventListener('click', function(e){
 $('#btnSave').onclick = saveCourse;
 $('#btnCancel').onclick = function(){ $('#editor').classList.remove('open'); };
 
-// 修复：直接删除，不使用confirm（防止WebView拦截）
 $('#btnDelete').onclick = function(){
   if(!editingId) return;
   state.courses = state.courses.filter(function(c){ return c.id !== editingId; });
@@ -559,7 +554,6 @@ $('#btnSaveSettings').onclick = function(){
   render();
 };
 
-// 修复：直接恢复默认，不使用confirm
 $('#btnReset').onclick = function(){
   const keepStart = state.startDate;
   const keepWeeks = state.totalWeeks;
@@ -572,41 +566,63 @@ $('#btnReset').onclick = function(){
   render();
 };
 
-// 修复：导出备份改为复制到剪贴板
-$('#btnExport').onclick = function(){
-  const jsonStr = JSON.stringify(state, null, 2);
-  const ta = document.createElement('textarea');
-  ta.value = jsonStr;
-  document.body.appendChild(ta);
-  ta.select();
-  document.execCommand('copy');
-  document.body.removeChild(ta);
-  alert('备份数据已复制到剪贴板！\n请粘贴到备忘录或微信收藏里保存。');
-};
+function openBackupModal(type) {
+  backupType = type;
+  const modal = $('#backupModal');
+  const title = $('#backupTitle');
+  const tip = $('#backupTip');
+  const textarea = $('#backupText');
+  const btnConfirm = $('#btnBackupConfirm');
 
-$('#btnImport').onclick = function(){ $('#fileInput').click(); };
+  if (type === 'export') {
+    title.textContent = '导出备份';
+    tip.textContent = '请复制以下内容，粘贴到备忘录或微信收藏里保存。';
+    textarea.value = JSON.stringify(state, null, 2);
+    textarea.select();
+    btnConfirm.textContent = '复制数据';
+  } else {
+    title.textContent = '导入备份';
+    tip.textContent = '请把你之前保存的备份数据粘贴到下方，然后点击确认导入。';
+    textarea.value = '';
+    btnConfirm.textContent = '确认导入';
+  }
+  modal.classList.add('open');
+}
 
-$('#fileInput').onchange = function(e){
-  const f = e.target.files[0];
-  if(!f) return;
-  const r = new FileReader();
-  r.onload = function(){
-    try{
-      const d = JSON.parse(r.result);
-      if(!d || !Array.isArray(d.courses)) throw new Error('文件格式不对');
-      if(d.startDate) state.startDate = d.startDate;
-      if(d.totalWeeks) state.totalWeeks = d.totalWeeks;
-      if(Array.isArray(d.periods) && d.periods.length) state.periods = d.periods;
+$('#btnExport').onclick = function(){ openBackupModal('export'); };
+$('#btnImport').onclick = function(){ openBackupModal('import'); };
+
+$('#btnBackupCancel').onclick = function(){ $('#backupModal').classList.remove('open'); };
+
+$('#btnBackupConfirm').onclick = function(){
+  const modal = $('#backupModal');
+  if (backupType === 'export') {
+    const textarea = $('#backupText');
+    textarea.select();
+    document.execCommand('copy');
+    alert('备份数据已复制！\n请找地方粘贴保存。');
+    modal.classList.remove('open');
+  } else {
+    const textarea = $('#backupText');
+    const raw = textarea.value.trim();
+    if (!raw) return alert('请先粘贴备份数据！');
+    try {
+      const d = JSON.parse(raw);
+      if (!d || !Array.isArray(d.courses)) throw new Error('数据格式不正确');
+      if (d.startDate) state.startDate = d.startDate;
+      if (d.totalWeeks) state.totalWeeks = d.totalWeeks;
+      if (Array.isArray(d.periods) && d.periods.length) state.periods = d.periods;
       state.courses = d.courses;
       state.viewWeek = currentWeek();
       save();
+      modal.classList.remove('open');
       $('#settings').classList.remove('open');
       render();
-      alert('导入成功');
-    }catch(err){ alert('导入失败：' + err.message); }
-  };
-  r.readAsText(f);
-  e.target.value = '';
+      alert('导入成功！');
+    } catch (err) {
+      alert('导入失败：' + err.message);
+    }
+  }
 };
 
 document.querySelectorAll('.mask').forEach(function(m){
@@ -618,7 +634,6 @@ if(!state.startDate){ state.startDate = mondayThisWeek(); save(); }
 state.viewWeek = currentWeek();
 render();
 
-// 当 App 从后台切回前台时，自动跳转当前周
 document.addEventListener('visibilitychange', function() {
     if (!document.hidden) {
         state.viewWeek = currentWeek();
