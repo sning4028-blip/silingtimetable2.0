@@ -43,7 +43,7 @@ header .title span{display:block;font-size:10px;opacity:.9;margin-top:1px}
 .time-cell:first-child{border-top:0}
 .time-cell b{font-size:10px;color:#6b7288;font-weight:600}
 .day-col{flex:1;position:relative;border-left:1px solid var(--line); min-width: 0;}
-/* 马卡龙课程块 (圆角加大，增加微小弹跳动画) */
+/* 马卡龙课程块 */
 .course{position:absolute;left:1.5px;right:1.5px;border-radius:10px;padding:4px 3px;color:#2c3e50;
   overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.06);transition:transform .2s ease}
 .course:active{transform:scale(.96)}
@@ -51,7 +51,7 @@ header .title span{display:block;font-size:10px;opacity:.9;margin-top:1px}
   display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;word-break:break-all}
 .course .s{font-size:8px;opacity:.85;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-/* 悬浮按钮变成爱心粉 */
+/* 悬浮按钮 */
 .fab{position:fixed;right:15px;bottom:calc(15px + env(safe-area-inset-bottom,0px));
   width:50px;height:50px;border:0;border-radius:50%;z-index:30;
   background:linear-gradient(135deg,#ffb7b2,#f8c8dc);color:#fff;font-size:26px;line-height:1;
@@ -94,18 +94,11 @@ header .title span{display:block;font-size:10px;opacity:.9;margin-top:1px}
   padding: 30px 20px calc(30px + env(safe-area-inset-bottom,0px));
 }
 #lovePopup img {
-  width: 120px;
-  height: 120px;
+  width: 140px;
+  height: 140px;
   object-fit: contain;
   margin-bottom: 15px;
-  animation: heartBeat 1.2s infinite ease-in-out;
-}
-@keyframes heartBeat {
-  0% { transform: scale(1); }
-  15% { transform: scale(1.1); }
-  30% { transform: scale(1); }
-  45% { transform: scale(1.1); }
-  60% { transform: scale(1); }
+  /* 去掉了原有的心跳动画，避免和 GIF 冲突 */
 }
 #lovePopup h2 {
   font-size: 20px;
@@ -135,8 +128,8 @@ header .title span{display:block;font-size:10px;opacity:.9;margin-top:1px}
 <!-- 🌟 开屏猫猫弹窗 🌟 -->
 <div class="mask open" id="lovePopup">
   <div class="sheet">
-    <!-- 请确保在 assets 文件夹里上传了名为 cat.png 的图片 -->
-    <img src="cat.png" alt="猫猫" onerror="this.style.display='none'">
+    <!-- 请确保在 assets 文件夹里上传了名为 cat.gif 和 dog.gif 的图片 -->
+    <img src="cat.gif" alt="猫猫" onerror="this.style.display='none'">
     <h2 id="loveText">今天有没有想宁~</h2>
     <div class="love-btns" id="loveBtns">
       <button class="btn-yes" onclick="loveReply('yes')">想啦🥰</button>
@@ -229,11 +222,10 @@ window.loveReply = function(type) {
     }, 1500);
   } else {
     h2.textContent = '哼，那再想一会儿！😤';
-    // 撒娇抖动效果
+    // 替换为 dog.gif
     const img = document.querySelector('#lovePopup img');
     if (img) {
-      img.style.animation = 'none';
-      setTimeout(() => { img.style.animation = 'heartBeat 0.5s infinite'; }, 10);
+      img.src = 'dog.gif';
     }
   }
 };
@@ -291,6 +283,7 @@ function formatWeeks(arr){
   return out.join(',');
 }
 
+// 精确修正后的默认状态
 function defaultState(){
   const P = parseWeeks;
   return {
@@ -302,21 +295,40 @@ function defaultState(){
       {s:'19:30',e:'20:15'},{s:'20:25',e:'21:10'}
     ],
     courses: [
-      {id:'m1',name:'管理学基础B',day:1,start:1,end:2,weeks:P('4-11'),room:'D107',teacher:'曾健',color:'#C7CEEA'},
-      {id:'m2',name:'管理学基础B',day:2,start:1,end:2,weeks:P('4-11'),room:'D204',teacher:'曾健',color:'#C7CEEA'},
-      {id:'e1',name:'高职英语1',day:1,start:3,end:4,weeks:P('4-15'),room:'B111',teacher:'唐莉',color:'#B5EAD7'},
-      {id:'e2',name:'高职英语1',day:4,start:3,end:4,weeks:P('4-15'),room:'B109',teacher:'唐莉',color:'#B5EAD7'},
-      {id:'y1',name:'大学语文',day:1,start:5,end:6,weeks:P('4-15'),room:'B316',teacher:'邹超才',color:'#FFDAC1'},
-      {id:'y2',name:'大学语文',day:5,start:3,end:4,weeks:P('4-10/2'),room:'B302(新)',teacher:'邹超才',color:'#FFDAC1'},
-      {id:'p1',name:'毛泽东思想和中国特色社会主义理论体系概论',day:2,start:3,end:4,weeks:P('5-12'),room:'C105',teacher:'徐兴兴',color:'#F8C8DC'},
-      {id:'p2',name:'毛泽东思想和中国特色社会主义理论体系概论',day:4,start:5,end:6,weeks:P('5-12'),room:'D203',teacher:'徐兴兴',color:'#F8C8DC'},
-      {id:'z1',name:'思想道德与法治',day:2,start:9,end:10,weeks:P('4-15'),room:'C201',teacher:'王波',color:'#A8E6CF'},
-      {id:'x1',name:'大学生心理健康教育',day:3,start:3,end:4,weeks:P('4-9'),room:'D204',teacher:'何晓清',color:'#E2F0CB'},
-      {id:'b1',name:'商务礼仪与沟通',day:3,start:5,end:8,weeks:P('9-16'),room:'B505形体礼仪实训室',teacher:'刘娟娟',color:'#FFB7B2'},
-      {id:'j1',name:'大学生就业指导1',day:4,start:1,end:2,weeks:P('9-12'),room:'B202',teacher:'简富广',color:'#D4A5A5'},
-      {id:'s1',name:'形势与政策',day:4,start:7,end:8,weeks:P('5-8'),room:'A212',teacher:'丁家龙',color:'#FDCFDF'},
-      {id:'u1',name:'军事理论',day:4,start:9,end:10,weeks:P('4-8'),room:'C201',teacher:'王波',color:'#B8E0D2'},
-      {id:'t1',name:'体育与健康1',day:5,start:1,end:2,weeks:P('4-15'),room:'体育场',teacher:'易志华',color:'#FFDAC1'}
+      // 周一
+      {id:'c1',name:'管理学基础B',day:1,start:1,end:2,weeks:P('4-11'),room:'D107',teacher:'曾健',color:'#C7CEEA'},
+      {id:'c2',name:'高职英语1',day:1,start:3,end:4,weeks:P('4-15'),room:'B111',teacher:'唐莉',color:'#B5EAD7'},
+      {id:'c3',name:'大学语文',day:1,start:5,end:6,weeks:P('4-15'),room:'B316',teacher:'邹超才',color:'#FFDAC1'},
+      
+      // 周二 (4-6双周、7-11周 管理学基础B)
+      {id:'c4',name:'管理学基础B',day:2,start:1,end:2,weeks:P('4,6,7-11'),room:'D204',teacher:'曾健',color:'#C7CEEA'},
+      {id:'c5',name:'毛泽东思想和中国特色社会主义理论体系概论',day:2,start:3,end:4,weeks:P('6-12'),room:'C105',teacher:'徐兴兴',color:'#F8C8DC'},
+      {id:'c6',name:'大学生心理健康教育',day:2,start:5,end:6,weeks:P('6'),room:'D204',teacher:'何晓清',color:'#E2F0CB'},
+      {id:'c7',name:'思想道德与法治',day:2,start:9,end:10,weeks:P('6-16'),room:'C201',teacher:'王波',color:'#A8E6CF'},
+      
+      // 周三
+      {id:'c8',name:'大学生心理健康教育',day:3,start:3,end:4,weeks:P('6-9'),room:'D204',teacher:'何晓清',color:'#E2F0CB'},
+      {id:'c9',name:'商务礼仪与沟通',day:3,start:5,end:8,weeks:P('9-16'),room:'B505形体礼仪实训室',teacher:'刘娟娟',color:'#FFB7B2'},
+      
+      // 周四
+      {id:'c10',name:'大学生就业指导1',day:4,start:1,end:2,weeks:P('9-12'),room:'B202',teacher:'简富广',color:'#D4A5A5'},
+      {id:'c11',name:'高职英语1',day:4,start:3,end:4,weeks:P('4-15'),room:'B109',teacher:'唐莉',color:'#B5EAD7'},
+      {id:'c12',name:'毛泽东思想和中国特色社会主义理论体系概论',day:4,start:5,end:6,weeks:P('6-12'),room:'C101',teacher:'徐兴兴',color:'#F8C8DC'},
+      {id:'c13',name:'形势与政策',day:4,start:7,end:8,weeks:P('5-8'),room:'A212',teacher:'丁家龙',color:'#FDCFDF'},
+      {id:'c14',name:'军事理论',day:4,start:9,end:10,weeks:P('4-8'),room:'C201',teacher:'王波',color:'#B8E0D2'},
+      
+      // 周五 (4-10双周大学语文)
+      {id:'c15',name:'体育与健康1',day:5,start:1,end:2,weeks:P('4-15'),room:'体育场1',teacher:'易志华',color:'#FFC3A0'},
+      {id:'c16',name:'大学语文',day:5,start:3,end:4,weeks:P('4-10/2'),room:'B302(新)',teacher:'邹超才',color:'#FFDAC1'},
+      {id:'c17',name:'毛泽东思想和中国特色社会主义理论体系概论',day:5,start:5,end:6,weeks:P('6-12'),room:'C101',teacher:'徐兴兴',color:'#F8C8DC'},
+      
+      // 周六 (第6周补课)
+      {id:'c18',name:'大学生心理健康教育',day:6,start:3,end:4,weeks:P('6'),room:'D204',teacher:'何晓清',color:'#E2F0CB'},
+      
+      // 周日 (第6周补课)
+      {id:'c19',name:'管理学基础B',day:7,start:1,end:2,weeks:P('6'),room:'D204',teacher:'曾健',color:'#C7CEEA'},
+      {id:'c20',name:'毛泽东思想和中国特色社会主义理论体系概论',day:7,start:3,end:4,weeks:P('6'),room:'C105',teacher:'徐兴兴',color:'#F8C8DC'},
+      {id:'c21',name:'思想道德与法治',day:7,start:9,end:10,weeks:P('6'),room:'C201',teacher:'王波',color:'#A8E6CF'}
     ],
     viewWeek: 1
   };
@@ -497,9 +509,10 @@ $('#f-colors').addEventListener('click', function(e){
 
 $('#btnSave').onclick = saveCourse;
 $('#btnCancel').onclick = function(){ $('#editor').classList.remove('open'); };
+
+// 修复：直接删除，不使用confirm（防止WebView拦截）
 $('#btnDelete').onclick = function(){
   if(!editingId) return;
-  if(!confirm('确定删除这节课吗？')) return;
   state.courses = state.courses.filter(function(c){ return c.id !== editingId; });
   save();
   $('#editor').classList.remove('open');
@@ -539,8 +552,8 @@ $('#btnSaveSettings').onclick = function(){
   render();
 };
 
+// 修复：直接恢复默认，不使用confirm
 $('#btnReset').onclick = function(){
-  if(!confirm('将恢复为原始课表，你手动添加/修改的内容会丢失，确定吗？')) return;
   const keepStart = state.startDate;
   const keepWeeks = state.totalWeeks;
   state = defaultState();
@@ -552,13 +565,16 @@ $('#btnReset').onclick = function(){
   render();
 };
 
+// 修复：导出备份改为复制到剪贴板
 $('#btnExport').onclick = function(){
-  const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = '课表备份.json';
-  document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000);
+  const jsonStr = JSON.stringify(state, null, 2);
+  const ta = document.createElement('textarea');
+  ta.value = jsonStr;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+  alert('备份数据已复制到剪贴板！\n请粘贴到备忘录或微信收藏里保存。');
 };
 
 $('#btnImport').onclick = function(){ $('#fileInput').click(); };
