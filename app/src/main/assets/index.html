@@ -98,7 +98,7 @@ header .title span{display:block;font-size:10px;opacity:.9;margin-top:1px}
   height: 140px;
   object-fit: contain;
   margin-bottom: 15px;
-  /* 加回心跳缩放特效，让静图也能动起来 */
+  /* 心跳缩放特效，让静图也能动起来 */
   animation: heartBeat 1.2s infinite ease-in-out;
 }
 @keyframes heartBeat {
@@ -291,7 +291,7 @@ function formatWeeks(arr){
   return out.join(',');
 }
 
-// 精确修正后的默认状态 (结合了你的最新修改)
+// 根据最新的教务系统文本，严格核对修正后的默认状态
 function defaultState(){
   const P = parseWeeks;
   return {
@@ -310,32 +310,31 @@ function defaultState(){
       
       // 周二 (4-6双周、7-11周 管理学基础B)
       {id:'c4',name:'管理学基础B',day:2,start:1,end:2,weeks:P('4,6,7-11'),room:'D204',teacher:'曾健',color:'#C7CEEA'},
-      {id:'c5',name:'毛泽东思想和中国特色社会主义理论体系概论',day:2,start:3,end:4,weeks:P('6-12'),room:'C105',teacher:'徐兴兴',color:'#F8C8DC'},
-      {id:'c6',name:'大学生心理健康教育',day:2,start:5,end:6,weeks:P('8'),room:'D204',teacher:'何晓清',color:'#E2F0CB'}, 
+      {id:'c5',name:'【调】毛泽东思想和中国特色社会主义理论体系概论',day:2,start:3,end:4,weeks:P('6-12'),room:'C105',teacher:'徐兴兴',color:'#F8C8DC'},
+      {id:'c6',name:'【调】大学生心理健康教育',day:2,start:5,end:6,weeks:P('8'),room:'D204',teacher:'何晓清',color:'#E2F0CB'},
       {id:'c7',name:'思想道德与法治',day:2,start:9,end:10,weeks:P('6-16'),room:'C201',teacher:'王波',color:'#A8E6CF'},
       
       // 周三
-      {id:'c8',name:'大学生心理健康教育',day:3,start:3,end:4,weeks:P('6-9'),room:'D204',teacher:'何晓清',color:'#E2F0CB'},
-      {id:'c9',name:'商务礼仪与沟通',day:3,start:5,end:8,weeks:P('9-16'),room:'B505形体礼仪实训室',teacher:'刘娟娟',color:'#FFB7B2'},
+      {id:'c8',name:'【调】大学生心理健康教育',day:3,start:3,end:4,weeks:P('6-9'),room:'D204',teacher:'何晓清',color:'#E2F0CB'},
+      {id:'c9',name:'商务礼仪与沟通',day:3,start:5,end:8,weeks:P('9-16'),room:'图B505形体礼仪实训室',teacher:'刘娟娇',color:'#FFB7B2'}, // 修正教师与教室
       
-      // 周四
+      // 周四 (删除了5-6节的毛概，教务系统显示周四无5-6节)
       {id:'c10',name:'大学生就业指导1',day:4,start:1,end:2,weeks:P('9-12'),room:'B202',teacher:'简富广',color:'#D4A5A5'},
       {id:'c11',name:'高职英语1',day:4,start:3,end:4,weeks:P('4-15'),room:'B109',teacher:'唐莉',color:'#B5EAD7'},
-      {id:'c12',name:'毛泽东思想和中国特色社会主义理论体系概论',day:4,start:5,end:6,weeks:P('6-12'),room:'C101',teacher:'徐兴兴',color:'#F8C8DC'},
       {id:'c13',name:'形势与政策',day:4,start:7,end:8,weeks:P('5-8'),room:'A212',teacher:'丁家龙',color:'#FDCFDF'},
       {id:'c14',name:'军事理论',day:4,start:9,end:10,weeks:P('4-8'),room:'C201',teacher:'王波',color:'#B8E0D2'},
       
       // 周五 (4-10双周大学语文)
       {id:'c15',name:'体育与健康1',day:5,start:1,end:2,weeks:P('4-15'),room:'体育场1',teacher:'易志华',color:'#FFC3A0'},
       {id:'c16',name:'大学语文',day:5,start:3,end:4,weeks:P('4-10/2'),room:'B302(新)',teacher:'邹超才',color:'#FFDAC1'},
-      {id:'c17',name:'毛泽东思想和中国特色社会主义理论体系概论',day:5,start:5,end:6,weeks:P('5-12'),room:'C101',teacher:'徐兴兴',color:'#F8C8DC'},
+      {id:'c17',name:'【调】毛泽东思想和中国特色社会主义理论体系概论',day:5,start:5,end:6,weeks:P('5-12'),room:'C101',teacher:'徐兴兴',color:'#F8C8DC'},
       
       // 周六 (第5周补课)
-      {id:'c18',name:'大学生心理健康教育',day:6,start:3,end:4,weeks:P('5'),room:'D204',teacher:'何晓清',color:'#E2F0CB'},
+      {id:'c18',name:'【调】大学生心理健康教育',day:6,start:3,end:4,weeks:P('5'),room:'D204',teacher:'何晓清',color:'#E2F0CB'},
       
-      // 周日 (第2周补课 + 第6周补课)
-      {id:'c19',name:'管理学基础B',day:7,start:1,end:2,weeks:P('6'),room:'D204',teacher:'曾健',color:'#C7CEEA'},
-      {id:'c20',name:'毛泽东思想和中国特色社会主义理论体系概论',day:7,start:3,end:4,weeks:P('2'),room:'C105',teacher:'徐兴兴',color:'#F8C8DC'},
+      // 周日 (第2周补课)
+      {id:'c19',name:'管理学基础B',day:7,start:1,end:2,weeks:P('2'),room:'D204',teacher:'曾健',color:'#C7CEEA'}, // 修正为第2周
+      {id:'c20',name:'【调】毛泽东思想和中国特色社会主义理论体系概论',day:7,start:3,end:4,weeks:P('2'),room:'C105',teacher:'徐兴兴',color:'#F8C8DC'},
       {id:'c21',name:'思想道德与法治',day:7,start:9,end:10,weeks:P('2'),room:'C201',teacher:'王波',color:'#A8E6CF'}
     ],
     viewWeek: 1
